@@ -1,9 +1,10 @@
-module.exports = function apiFuncTemplateFactory (funcName, path, options, mock, mockData) {
-    return `export function ${funcName === 'delete' ? 'delete_1' : funcName}(query, success, fail, complete, headers, others) {
+
+import CONSTANTS from "_constants/index"
+export function user(query, success, fail, complete, headers, others) {
     const app = getApp();
-    let config = Object.assign({}, ${JSON.stringify(options)},{ 
-        url: CONSTANTS.domain + "${path}",
-        headers: Object.assign({}, ${JSON.stringify(options.headers)}, headers || {})})
+    let config = Object.assign({}, {"headers":{"forwardUrl":"www.baidu.com"},"method":"GET","dataType":"json"},{ 
+        url: CONSTANTS.domain + "/user",
+        headers: Object.assign({}, {"forwardUrl":"www.baidu.com"}, headers || {})})
     if (query.token) { config.headers.token = query.token }
 
     delete query.token
@@ -81,6 +82,5 @@ module.exports = function apiFuncTemplateFactory (funcName, path, options, mock,
         },
         complete: complete,
     })
-    return ${!mock} ? (my.httpRequest || my.request)(options) : success(JSON.parse(${JSON.stringify(mockData || {})}))
-}`
+    return false ? (my.httpRequest || my.request)(options) : success(JSON.parse("{\n    \"code\": 0,\n    \"data\": {\n        \"userId\": \"userId_6\",\n        \"thirdPartyId\": \"thirdPartyId_9\",\n        \"platformId\": \"platformId_3\",\n        \"name\": \"name_3\",\n        \"gender\": null,\n        \"phone\": \"phone_2\",\n        \"avatar\": \"avatar_0\",\n        \"status\": null,\n        \"province\": \"province_2\",\n        \"city\": \"city_4\",\n        \"isStudentCertified\": \"isStudentCertified_7\",\n        \"userType\": \"userType_8\",\n        \"userStatus\": \"userStatus_1\",\n        \"isCertified\": \"isCertified_0\"\n    },\n    \"msg\": \"mock请求成功\",\n    \"success\": true\n}"))
 }

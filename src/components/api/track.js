@@ -1,9 +1,10 @@
-module.exports = function apiFuncTemplateFactory (funcName, path, options, mock, mockData) {
-    return `export function ${funcName === 'delete' ? 'delete_1' : funcName}(query, success, fail, complete, headers, others) {
+
+import CONSTANTS from "_constants/index"
+export function receive(query, success, fail, complete, headers, others) {
     const app = getApp();
-    let config = Object.assign({}, ${JSON.stringify(options)},{ 
-        url: CONSTANTS.domain + "${path}",
-        headers: Object.assign({}, ${JSON.stringify(options.headers)}, headers || {})})
+    let config = Object.assign({}, {"headers":{"Content-Type":"application/json","forwardUrl":"www.baidu.com"},"method":"POST","dataType":"json"},{ 
+        url: CONSTANTS.domain + "/track/receive",
+        headers: Object.assign({}, {"Content-Type":"application/json","forwardUrl":"www.baidu.com"}, headers || {})})
     if (query.token) { config.headers.token = query.token }
 
     delete query.token
@@ -81,6 +82,5 @@ module.exports = function apiFuncTemplateFactory (funcName, path, options, mock,
         },
         complete: complete,
     })
-    return ${!mock} ? (my.httpRequest || my.request)(options) : success(JSON.parse(${JSON.stringify(mockData || {})}))
-}`
+    return false ? (my.httpRequest || my.request)(options) : success(JSON.parse("{\n    \"code\": 0,\n    \"data\": null,\n    \"msg\": \"mock请求成功\",\n    \"success\": true\n}"))
 }
